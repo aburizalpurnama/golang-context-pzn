@@ -29,3 +29,9 @@
 - Cocok sekali digunakan untuk melakukan query ke database atau http api dengan memberikan batas maksimal (timeout)
 
 - Cancel function harus tetap dijalankan jika suatu proses telah selesai (mengantisipasi jika suatu proses selesai lebih cepat dibandingkan durasi timeout)
+
+## Context With Deadline
+
+### context.WithDeadline(parent, time)
+
+- Mirip seperti context with time out, tapi bedanya jika timeout berdasarkan durasi sedangkan deadline berdasarkan waktu (jam tertentu)
