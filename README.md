@@ -5,7 +5,9 @@
 ### context.WithValue(parent, key, value)
 
 - Digunakan untuk membuat sebuah child context yang terdapat nilai didalamnya
+
 - Nilai yang terdapat pada sebuah context juga akan terdapat pada semua child context turunannya
+
 - Context yang lebih bawah dapat mengambil nilai dari semua parent yang terhubung
 
 ## Context With Cancel
@@ -22,6 +24,8 @@
 
 ###  context.WithTimeout(parent)
 
-- Mirip seperti context with cancel, bedanya sinyal cancel tidak dijalankan manual melaikan secara otomatis menggunakan batas waktu tertentu.
+- Mirip seperti context with cancel, bedanya sinyal cancel tidak dijalankan manual melaikan secara otomatis menggunakan batas waktu tertentu. (Durasi)
 
 - Cocok sekali digunakan untuk melakukan query ke database atau http api dengan memberikan batas maksimal (timeout)
+
+- Cancel function harus tetap dijalankan jika suatu proses telah selesai (mengantisipasi jika suatu proses selesai lebih cepat dibandingkan durasi timeout)
