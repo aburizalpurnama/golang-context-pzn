@@ -42,7 +42,6 @@ func TestCreateContextWithValue(t *testing.T) {
 	fmt.Println(contextF.Value("c"))
 
 	fmt.Println(contextF.Value("b"))
-
 	fmt.Println(contextA.Value("c"))
 
 }
