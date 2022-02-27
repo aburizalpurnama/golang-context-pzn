@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"runtime"
 	"testing"
+	"time"
 )
 
 func TestContext(t *testing.T) {
@@ -47,16 +48,26 @@ func TestCreateContextWithValue(t *testing.T) {
 
 }
 
-func CreateCounter() chan int {
+func CreateCounter(ctx context.Context) chan int {
 	destination := make(chan int)
 
 	go func() {
 		defer close(destination)
 		counter := 1
 
+		// it's makes a goroutine leaks
 		for {
-			destination <- counter
-			counter++
+
+			// Menambahkan sebuah pengecekan terhadap context
+			select {
+
+			// if ctx.Done() return a value, looping will stop and gorouting will stop also
+			case <-ctx.Done():
+				return
+			default:
+				destination <- counter
+				counter++
+			}
 		}
 	}()
 
@@ -66,7 +77,13 @@ func CreateCounter() chan int {
 func TestContextWithCancel(t *testing.T) {
 	fmt.Println("Total Goroutine :", runtime.NumGoroutine())
 
-	destination := CreateCounter()
+	// create parent context
+	parent := context.Background()
+
+	// create child context with cancel
+	ctx, cancel := context.WithCancel(parent)
+
+	destination := CreateCounter(ctx)
 
 	for n := range destination {
 		fmt.Println("Counter", n)
@@ -74,6 +91,11 @@ func TestContextWithCancel(t *testing.T) {
 			break
 		}
 	}
+
+	// execute the cencel(), so the done() function will return a value, and goroutine will stop
+	cancel()
+
+	time.Sleep(2 * time.Second)
 
 	fmt.Println("Total Goroutine :", runtime.NumGoroutine())
 }
